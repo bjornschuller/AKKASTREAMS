@@ -1,6 +1,7 @@
 #Akka Streams
-First of all, this is just one of my learning projects that I use to become a better programmer.
+First of all, this is just one of my learning projects that I use to become a better programmer. With this library you can create linear and non-linear streams for all kinds of processing.
 
+Akka Streams build up a stream library based on Akka Actors 
 In big data processing, one of the challenges is how to **consume** and **transform** **large amounts of data** efficiently and within a fixed set of resources. There are a few key problems faced when trying to consume the data:
 
 **1. Blocking**
@@ -56,6 +57,15 @@ While you can do a lot with just a Source and a Sink, things get more interestin
 
 A Runnable Flow, no matter how complex, includes all the facilities for **back pressure**. Data flows through the system one way, but requests for additional data to flow back through the system in the other direction. Under the hood, the Sink sends a request back through the Flows to the Source. This request notifies the Source that the Sink is ready to handle some more data. The Source will then push a set amount of data through the Flows into the Sink. The Sink will then process this data and when it has finished it will send another request for more data. This means that if the Sink gets backed up, then the time between those requests will increase and the necessary back pressure is generated.
 
+#### Summary: Source -- Flow -- Sink 
+The Source class represents the origin of the data, from here the various events will flow downstream; the Flow gets data from upstream, possibly applies transformations and emits the result to the next stage; finally the Sink is the last part of the stream, the final destination of your data.
+
+This stages are characterized by the kind of ports they expose: **Source has a single output port, Flow has input and output port and Sink has just the input port.** For this reason, when you append a Flow to a Source, what you get in return is a new Source, and so on. You can compose as many stages as needed, given that you respect the kind of ports they expose (e.g. you can’t connect two Sources together).
+
+In particular the Flow class exposes many of the functions anyone familiar with scala collections already knows, like map, filter and fold. A notable missing piece is the flatMap function: it’s actually there under the mapConcat alias (you know, you can’t run a for-comprehension on a Flow). Finally there are many more functions that are strictly related to the nature of the stream, like mapAsync, throttle or buffer.
+
+
+
 #### Streaming File IO
 Akka Streams provide simple **Sources** and **Sinks** that can work with **ByteString instances to perform IO operations on files**. The content of a ByteString is a sequence of bytes instead of characters. You can use the "utf8String" method to decodes this ByteString as a UTF-8 encoded String.
 
@@ -70,3 +80,5 @@ http://blog.akka.io/streams/2016/07/06/threading-and-concurrency-in-akka-streams
 http://doc.akka.io/docs/akka/2.4.10/scala/stream/stream-io.html#streaming-file-io
 
 http://janlisse.github.io/blog/2015/12/21/stream-processing-of-large-csv-files/
+
+http://www.measurence.com/tech-blog/2016/06/01/a-dive-into-akka-streams.html
