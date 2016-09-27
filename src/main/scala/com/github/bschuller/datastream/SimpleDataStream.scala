@@ -22,9 +22,9 @@ class SimpleDataStream(byteStringSource: Source[ByteString, Future[IOResult]]) e
       separator(line)
   }
 
-  val printReport = Flow[Map[String, Option[Option[String]]]].map{
+  val printReport = Flow[Map[String, Option[String]]].map{
     dataMapa =>
-      println(s"=====COUNTRY DATA REPORT: =====")
+      println(s"=====${dataMapa("Country").getOrElse("Unknown Country")} Country Data Report=====")
       for ((key,value) <- dataMapa) {
         println(s"key: $key, value: $value")
       }
@@ -43,10 +43,10 @@ class SimpleDataStream(byteStringSource: Source[ByteString, Future[IOResult]]) e
 
 
 
-  private def separator(line: String): Map[String, Option[Option[String]]] = {
-    val lineValueList = new ListBuffer[Option[String]]()
+  private def separator(line: String): Map[String, Option[String]] = {
+    val lineValueList = new ListBuffer[String]()
     line.split(";").foreach{
-      value => lineValueList += Option(value)
+      value => lineValueList += value
     }
     Map(
       "Country" -> lineValueList.headOption,
