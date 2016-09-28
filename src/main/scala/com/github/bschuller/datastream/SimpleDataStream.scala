@@ -12,7 +12,7 @@ import scala.concurrent.Future
   * Simple datastream that transforms the byteString source to utf8Strings and prints the output to the console
   */
 class SimpleDataStream(byteStringSource: Source[ByteString, Future[IOResult]]) extends CoreServices{
-  
+
   val reorganizeDataByLine = Framing.delimiter(ByteString("\n"), Int.MaxValue, allowTruncation = false)
 
   val convertLineToList = Flow[ByteString].map{

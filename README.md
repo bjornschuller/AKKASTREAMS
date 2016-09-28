@@ -1,5 +1,8 @@
+
+First of all, this is just one of my learning projects that I use to become a better programmer. 
+
 #Akka Streams
-First of all, this is just one of my learning projects that I use to become a better programmer. With this library you can create linear and non-linear streams for all kinds of processing.
+With this library you can create linear and non-linear streams for all kinds of processing.
 
 Akka Streams build up a stream library based on Akka Actors 
 In big data processing, one of the challenges is how to **consume** and **transform** **large amounts of data** efficiently and within a fixed set of resources. There are a few key problems faced when trying to consume the data:
