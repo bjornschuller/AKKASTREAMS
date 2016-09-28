@@ -1,5 +1,4 @@
-
-First of all, this is just one of my learning projects that I use to become a better programmer. 
+This is just one of my learning projects that I use to become a better programmer. 
 
 #Akka Streams
 With this library you can create linear and non-linear streams for all kinds of processing.
