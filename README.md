@@ -136,18 +136,15 @@ val actorBasedSource = Source.actorPublisher[SimpleMessage](Props[ActorBasedSour
 This creates a 'Source' that is materialized to an actorRef that points to the ActorBasedSourcePublisher Actor. So each message send to this Actor will be handled in this stream.  
 
 #### Sending a materialized source ActorRef as a value through the stream
-A thing that can be handy is to send a materialized source ActorRef through the Stream. This way you will be able to handle messages asynchronous and send the 'final response' back to the initial sender.
-An example is made in com.github.bschuller.datastream.actorrefallthewaythroughstream
-
-Important to note is that this ActorPublisher declares to produce tuple values where the second element in the tuple relates to the ActorRef of the sender. The ActorRef of the sender has a different ActorRef then that of the ActorPublisher. 
-
-
+A thing that can be handy is to send a materialized source ActorRef through the Stream. This way you will be able to handle messages asynchronous and send the 'final response' back to the initial sender. An example is made in com.github.bschuller.datastream.actorrefallthewaythroughstream. Important to note is that this ActorPublisher declares to produce tuple values where the second element in the tuple relates to the ActorRef of the sender. 
+The AKKA tell pattern uses a 'fire and forget protocol', since you are just telling something and are not waiting for a reply. In contrast, the ask pattern sends messages just like the tell pattern but the receiving Actor must reply in order to complete the returned Task with a value. To reply one must konw the ActorRef (i.e., the address of the Actor) since you are otherwise not knowing to who you have to reply. Therefore the Ask operation creates an internal actor for handling this reply (this is another ActorRef then the ActorPublisher ActorRef), which needs to have a timeout after which it is destroyed in order not to leak resources. If the actor does not complete the task, it will expire after the timeout period. In this example, we are using the ask pattern so we know to who we must reply once the stream has finished. 
 
 
 ##### **Sources**
 
 http://boldradius.com/blog-post/VS0NpTAAADAACs_E/introduction-to-akka-streams
 http://blog.akka.io/streams/2016/07/06/threading-and-concurrency-in-akka-streams-explained
+http://getakka.net/docs/working-with-actors/sending-messages
 http://doc.akka.io/docs/akka/2.4.10/scala/stream/stream-io.html#streaming-file-io
 http://janlisse.github.io/blog/2015/12/21/stream-processing-of-large-csv-files/
 http://zuchos.com/blog/2015/05/23/how-to-write-a-subscriber-for-akka-streams/
